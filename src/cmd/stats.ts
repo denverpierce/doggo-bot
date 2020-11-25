@@ -1,6 +1,6 @@
-import { register } from '../config'
+import { eventAdapter, slackClient } from '../config';
 
-register('doggoStats', 'Will respond to walking events with doggo stats', (bot, msg, _cfg, _args) => {
+eventAdapter.on('app_mention', (msg) => {
   /*
   7.8 miles
 73 doggos
@@ -12,10 +12,10 @@ Done in ~2 hours. Solid 30 minutes faster than last time
   const parsedMiles = findAndParseStateLine(msg.text, MILES);
   calculateStats(parsedDoggos, parsedMiles);
 
-  bot.postMessage({
+  slackClient.chat.postMessage({
     channel: msg.channel,
     text: calculateStats(parsedDoggos, parsedMiles)
-  })
+  }).catch((e)=>console.log(e))
 });
 
 const ANIMAL_DOGGOS = 'doggos';

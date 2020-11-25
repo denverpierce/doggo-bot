@@ -1,1 +1,1 @@
-import './stats';
+const a = 'a';

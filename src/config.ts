@@ -1,17 +1,18 @@
-import { setup } from 'slacklib'
+import { createEventAdapter } from '@slack/events-api';
+import { WebClient } from '@slack/web-api';
 
-interface Config {
-  hello: string
+const slackSigningSecret = process.env.SLACK_SIGNING_SECRET;
+const slackToken = process.env.SLACK_TOKEN;
+const port = process.env.PORT || 3000;
+
+if (!slackSigningSecret) {
+  throw new Error('No secret found, can\'t start');
+}
+if (!slackToken) {
+  throw new Error('No token found, can\'t start');
 }
 
-const defaultConfig: Config = {
-  hello: 'world'
-}
-
-const { getConfig, setConfig, register } = setup(defaultConfig)
-
-export {
-  getConfig,
-  setConfig,
-  register
-}
+const eventAdapter = createEventAdapter(slackSigningSecret);
+const server = await eventAdapter.start(port as number); // TODO: fix
+const slackClient = new WebClient(slackToken);
+export { eventAdapter, server, slackClient };
