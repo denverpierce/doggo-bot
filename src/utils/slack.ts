@@ -27,7 +27,8 @@ interface GoogleCloudHttpRequest extends Request {
  */
 export const verifyWebhook = (req: GoogleCloudHttpRequest) => {
   const slackSig = req.headers['x-slack-signature'];
-  const slackTimestamp = req.headers['x-slack-request-timestamp']
+  const slackTimestamp = req.headers['x-slack-request-timestamp'];
+
   if (!process.env.SLACK_SECRET) {
     throw new Error('Secret not found, exiting.')
   }
@@ -36,7 +37,7 @@ export const verifyWebhook = (req: GoogleCloudHttpRequest) => {
     !slackTimestamp ||
     typeof slackTimestamp !== 'number'
   ) {
-    throw new Error("ow")
+    throw new Error("The slack webhook didn't have the right headers")
   }
   const signature: VerifyRequestSignatureParams = {
     signingSecret: process.env.SLACK_SECRET,

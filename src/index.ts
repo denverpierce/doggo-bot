@@ -17,11 +17,21 @@ export const logger = createLogger({
 });
 
 export function getDoggoStats(req: Request, res: Response) {
+    if(req.body.challenge){
+        res
+        .status(200)
+        .type("application/json")
+        .send(JSON.stringify({
+            challenge: req.body.challenge
+        }))
+    }
     logger.info("Attempting to get Doggo stats");
 
     verifyWebhook(req); // side effects on failure only
+
     const message = getStatsMessage(req.body);
     const formattedSlackRespone = formatSlackMessage(message);
+
     res
         .status(200)
         .type("application/json")

@@ -30,7 +30,7 @@
     "dev-run": "yarn tsc-watch --onSuccess './scripts/dev-build-run.sh'",
     "prepare": "yarn run compile",
     "pretest": "yarn run compile",
-    "deploy-gcf": "cp package.json build/ && yarn run compile && gcloud functions deploy doggo-bot --runtime nodejs10 --trigger-http --set-env-vars \"SLACK_SECRET=$SLACK_SIGNING_SECRET,SLACK_TOKEN=$SLACK_TOKEN\" --allow-unauthenticated --source ./build $\"FUNCTION_TARGET\"",
+    "deploy-gcf": "cp package.json build && yarn run compile && gcloud functions deploy $FUNCTION_TARGET --runtime nodejs10 --trigger-http --set-env-vars \"SLACK_SECRET=$SLACK_SIGNING_SECRET,SLACK_TOKEN=$SLACK_TOKEN\" --allow-unauthenticated --source ./build",
     "deploy-run": "./scripts/build-deploy.sh",
     "start": "cd build;functions-framework --target ${FUNCTION_TARGET};cd .."
   }
