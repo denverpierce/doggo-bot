@@ -3,4 +3,4 @@ node_modules
 *.map
 database
 *.log
-bin
+build

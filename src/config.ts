@@ -6,10 +6,10 @@ const slackToken = process.env.SLACK_TOKEN;
 const port = process.env.PORT || 3000;
 
 if (!slackSigningSecret) {
-  throw new Error('No secret found, can\'t start');
+  throw new Error("No secret found, can't start");
 }
 if (!slackToken) {
-  throw new Error('No token found, can\'t start');
+  throw new Error("No token found, can't start");
 }
 
 const eventAdapter = createEventAdapter(slackSigningSecret);
