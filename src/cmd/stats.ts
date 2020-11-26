@@ -10,6 +10,7 @@ const MILES = 'miles'; // not the cat
 export type Stats = typeof ANIMAL_DOGGOS | typeof MILES; // add other animals
 
 export const getStatsMessage = (msg: ChatMeMessageArguments) => {
+  logger.info('Beginning parse pass, message: ', msg.text);
   const parsedDoggos = findAndParseStatLine(msg.text, ANIMAL_DOGGOS);
   const parsedMiles = findAndParseStatLine(msg.text, MILES);
   logger.info(`${parsedDoggos.stat} as ${parsedDoggos.parsedValue}`);

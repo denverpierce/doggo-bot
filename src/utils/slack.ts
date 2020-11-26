@@ -15,6 +15,7 @@
 import { verifyRequestSignature } from '@slack/events-api';
 import { VerifyRequestSignatureParams } from '@slack/events-api/dist/http-handler';
 import { Request } from 'express';
+import { logger } from '..';
 interface GoogleCloudHttpRequest extends Request {
   rawBody?: Buffer;
 }
@@ -30,6 +31,7 @@ export const verifyWebhook = (req: GoogleCloudHttpRequest) => {
   const slackTimestamp = req.headers['x-slack-request-timestamp'];
 
   if (!process.env.SLACK_SIGNING_SECRET) {
+    logger.error('Secret not found, exiting.')
     throw new Error('Secret not found, exiting.')
   }
   if (!slackSig ||
@@ -37,6 +39,7 @@ export const verifyWebhook = (req: GoogleCloudHttpRequest) => {
     !slackTimestamp ||
     typeof slackTimestamp !== 'number'
   ) {
+    logger.error("The slack webhook didn't have the right headers");
     throw new Error("The slack webhook didn't have the right headers")
   }
   const signature: VerifyRequestSignatureParams = {
@@ -48,8 +51,8 @@ export const verifyWebhook = (req: GoogleCloudHttpRequest) => {
   };
 
   if (!verifyRequestSignature(signature)) {
-    const error = new Error('Invalid credentials');
-    throw error;
+    logger.error('Invalid credentials');
+    throw new Error('Invalid credentials');
   }
 };
 
