@@ -1,6 +1,6 @@
-# Doggo bot, for tracking doggo stats!
+# Doggo bot, for tracking doggo stats
 
-Based on https://github.com/1000team/bot-starter which uses https://github.com/Seikho/slacklib
+Based on <https://github.com/ptone/node-cloud-function-boiler>
 
 ## Install
 
@@ -11,9 +11,9 @@ yarn
 ## Dev
 
 ```bash
-tsc
+yarn run dev
 ```
 
 ## TODO
 
-tsc -w
+Everything.

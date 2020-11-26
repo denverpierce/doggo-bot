@@ -1,15 +1,13 @@
 {
+  "extends": "./node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
-    "target": "es2017",
-    "module": "ESNext",
-    "moduleResolution":"Node",
-    "strict": true,
-    "outDir": "bin",
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "sourceMap": true
+    "rootDir": "./src",
+    "outDir": "build"
   },
   "include": [
-    "src"
+    "src/*.ts",
+    "src/**/*.ts",
+    "test/*.ts",
+    "test/**/*.ts"
   ]
 }
