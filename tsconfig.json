@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "target": "es2017",
-    "module": "ESNext",
+    "module": "CommonJS",
     "moduleResolution":"Node",
+    "allowSyntheticDefaultImports": true,
     "strict": true,
     "outDir": "build",
     "esModuleInterop": true,

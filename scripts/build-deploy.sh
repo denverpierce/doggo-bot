@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ `git status --porcelain` ]];
+if git status --porcelain;
 then
   echo "There are untracked changes, please commit them first"
   exit 1

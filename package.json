@@ -6,34 +6,32 @@
   "author": "Denver Pierce <Denver.Pierec@gmail.com>",
   "license": "Apache-2.0",
   "dependencies": {
-    "@google-cloud/functions-framework": "^1.1.1",
+    "@google-cloud/functions-framework": "^1.7.1",
     "@google-cloud/logging-winston": "^1.1.1",
     "@slack/events-api": "^2.3.4",
     "@slack/web-api": "^5.13.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "@types/express": "^4.16.1",
     "@types/node": "12.x",
+    "@typescript-eslint/eslint-plugin": "^4.8.2",
+    "@typescript-eslint/parser": "^4.8.2",
+    "eslint": "^7.14.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
     "express": "^4.16.4",
-    "gts": "^3.0.2",
     "ts-node": "^8.1.0",
     "tsc-watch": "^2.1.2",
     "typescript": "^4.0.3"
   },
   "scripts": {
-    "check": "gts check",
-    "clean": "gts clean",
     "compile": "yarn tsc",
     "dev": "yarn tsc-watch --onSuccess 'yarn run start'",
     "dev-run": "yarn tsc-watch --onSuccess './scripts/dev-build-run.sh'",
-    "fix": "gts fix",
     "prepare": "yarn run compile",
     "pretest": "yarn run compile",
-    "posttest": "yarn run lint",
-    "deploy-gcf": "cp package.json build/ && yarn run compile && gcloud functions deploy --runtime nodejs10 --trigger-http --source ./build ${FUNCTION_TARGET}",
+    "deploy-gcf": "cp package.json build/ && yarn run compile && gcloud functions deploy doggo-bot --runtime nodejs10 --trigger-http --set-env-vars \"SLACK_SECRET=$SLACK_SIGNING_SECRET,SLACK_TOKEN=$SLACK_TOKEN\" --allow-unauthenticated --source ./build $\"FUNCTION_TARGET\"",
     "deploy-run": "./scripts/build-deploy.sh",
-    "start": "cd build;functions-framework --target ${FUNCTION_TARGET};cd ..",
-    "lint": "gts lint"
+    "start": "cd build;functions-framework --target ${FUNCTION_TARGET};cd .."
   }
 }

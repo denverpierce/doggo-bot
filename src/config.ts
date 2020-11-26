@@ -13,6 +13,6 @@ if (!slackToken) {
 }
 
 const eventAdapter = createEventAdapter(slackSigningSecret);
-const server = await eventAdapter.start(port as number); // TODO: fix
+// const server = await eventAdapter.start(port as number); // TODO: fix
 const slackClient = new WebClient(slackToken);
-export { eventAdapter, server, slackClient };
+export { eventAdapter, slackClient };
