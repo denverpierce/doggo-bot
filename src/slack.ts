@@ -14,8 +14,24 @@
 
 import { verifyRequestSignature } from '@slack/events-api';
 import { VerifyRequestSignatureParams } from '@slack/events-api/dist/http-handler';
+import { WebAPICallResult } from '@slack/web-api';
 import { Request } from 'express';
-import { logger } from '..';
+import { logger } from '.';
+import { slackClient } from './services';
+
+export type EventAppMention = {
+  blocks: any[], // RTF version of the message
+  text: string,
+  type: 'app_mention',
+  channel: string,
+  user: string,
+}
+
+export type SlackWebHookEvent = {
+  event: EventAppMention,
+  token: string,
+}
+
 interface GoogleCloudHttpRequest extends Request {
   rawBody?: Buffer;
 }
@@ -31,22 +47,24 @@ export const verifyWebhook = (req: GoogleCloudHttpRequest) => {
   const slackTimestamp = req.headers['x-slack-request-timestamp'];
 
   if (!process.env.SLACK_SIGNING_SECRET) {
-    logger.error('Secret not found, exiting.')
-    throw new Error('Secret not found, exiting.')
+    logger.error('Secret not found, exiting.');
+    throw new Error('Secret not found, exiting.');
   }
-  if (!slackSig ||
-    typeof slackSig !== 'string' ||
-    !slackTimestamp ||
-    typeof slackTimestamp !== 'number'
+
+  if (
+    !slackSig
+    || typeof slackSig !== 'string'
+    || !slackTimestamp
+    || typeof slackTimestamp !== 'string'
   ) {
-    logger.error("The slack webhook didn't have the right headers");
-    throw new Error("The slack webhook didn't have the right headers")
+    logger.error(`The slack webhook didn't have the right headers.  The headers given were: ${JSON.stringify(req.headers)}`);
+    throw new Error("The slack webhook didn't have the right headers");
   }
   const signature: VerifyRequestSignatureParams = {
     signingSecret: process.env.SLACK_SIGNING_SECRET,
     requestSignature: slackSig,
-    requestTimestamp: slackTimestamp,
-    //@ts-ignore #notmytypes
+    requestTimestamp: parseFloat(slackTimestamp),
+    // @ts-ignore #notmytypes
     body: req.rawBody,
   };
 
@@ -56,18 +74,10 @@ export const verifyWebhook = (req: GoogleCloudHttpRequest) => {
   }
 };
 
-/**
- * Format the Knowledge Graph API response into a richly formatted Slack message.
- *
- * @param {string} message The message to be formatted.
- * @returns {object} The formatted message.
- */
-export const formatSlackMessage = (message:string) => {
-  // Prepare a rich Slack message
-  // See https://api.slack.com/docs/message-formatting
-  const slackMessage:{response_type:string, text:string} = {
-    response_type: 'in_channel',
-    text: message,
-  };
-  return slackMessage;
-};
+export const sendStatsReply = (
+  message: string,
+  channel: string,
+): Promise<WebAPICallResult> => slackClient.chat.postMessage({
+  channel,
+  text: message,
+});

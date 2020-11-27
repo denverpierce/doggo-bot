@@ -1,40 +1,41 @@
-import { Request, Response } from "express"
+import { Request, Response } from 'express';
 import { createLogger, transports } from 'winston';
 import { LoggingWinston } from '@google-cloud/logging-winston';
-import { formatSlackMessage, verifyWebhook } from "./utils/slack";
-import { getStatsMessage } from "./cmd/stats";
+import { sendStatsReply, verifyWebhook } from './slack';
+import { getStatsMessage } from './stats';
 
 // set up logging (note FUNCTION_TARGET has replaced FUNCTION_NAME as reserved env var)
-const loggingWinston = new LoggingWinston({ 'logName': process.env['FUNCTION_TARGET'] });
+const loggingWinston = new LoggingWinston({ logName: process.env.FUNCTION_TARGET });
 export const logger = createLogger({
-    level: 'info',
-    transports: [
-        // goes to functions log
-        new transports.Console(),
-        // goes to named log, under "Global" resource
-        loggingWinston,
-    ],
+  level: 'info',
+  transports: [
+    // goes to functions log
+    new transports.Console(),
+    // goes to named log, under "Global" resource
+    loggingWinston,
+  ],
 });
 
-export function getDoggoStats(req: Request, res: Response) {
-    if(req.body.challenge){
-        res
-        .status(200)
-        .type("application/json")
-        .send(JSON.stringify({
-            challenge: req.body.challenge
-        }))
-    }
-    logger.info("Attempting to get Doggo stats");
-
-    verifyWebhook(req); // side effects on failure only
-
-    const message = getStatsMessage(req.body);
-    const formattedSlackRespone = formatSlackMessage(message);
-
+export async function getDoggoStats(req: Request, res: Response) {
+  if (req.body.challenge) {
+    // for initial verification of the webhook from slack
     res
-        .status(200)
-        .type("application/json")
-        .send(JSON.stringify(formattedSlackRespone))
-        .end()
+      .status(200)
+      .type('application/json')
+      .send(JSON.stringify({
+        challenge: req.body.challenge,
+      }));
+  }
+
+  verifyWebhook(req); // side effects on failure only
+
+  logger.info('Req verified, attempting to get Doggo stats');
+  const message = getStatsMessage(req.body);
+  await sendStatsReply(message, req.body.event.channel).catch((e) => {
+    logger.error(`An error occured sending the message out: ${e.stack}`);
+  });
+
+  res
+    .status(200)
+    .end();
 }
