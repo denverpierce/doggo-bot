@@ -19,7 +19,7 @@ export const calculateStats = (
     const miles = parsedMiles.parsedValue;
     const animalMiles = animals / miles;
     if (Number.isFinite(animalMiles)) {
-      return `You went ${animalMiles} ${parsedAnimal.stat} miles! Amazing!`;
+      return `You went ${animalMiles.toFixed(1)} ${parsedAnimal.stat} miles! Amazing!`;
     }
   }
   return `I couldn't figure out how many ${parsedAnimal.stat} miles you did :(`;

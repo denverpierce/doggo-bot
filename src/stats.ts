@@ -17,16 +17,22 @@ const MILES = 'miles'; // not the cat
 export type Stats = typeof ANIMAL_DOGGOS | typeof MILES; // add other animals
 export const getStatsMessage = (msg: SlackWebHookEvent): string[] => {
   logger.info(`Beginning parse pass, submitted event: ${JSON.stringify(msg.event)}`);
+  const text = msg.event.text.replace('<@U01FG7N9NDT>', ''); // clean out the mention itself
   try {
-    const parsedMiles = findAndParseStatLine(msg.event.text, MILES);
+    const parsedMiles = findAndParseStatLine(text, MILES);
 
-    return ANIMALS_ALL.map(animal => findAndParseStatLine(msg.event.text, animal))
+    return ANIMALS_ALL.map(animal => findAndParseStatLine(text, animal))
+      .map(t => {
+        // wtb tap()
+        logger.info(`Attempting to parse: ${text}`);
+        return t;
+      })
+      .filter(a => a.parsedValue) // filter out unfound lines
       .map(t => {
         // wtb tap()
         logger.info(`Parsed animal: ${JSON.stringify(t)}`);
         return t;
       })
-      .filter(a => a.parsedValue) // filter out unfound lines
       .map(foundAnimal => calculateStats(foundAnimal, parsedMiles));
   } catch (e) {
     logger.error(`Parse failed, error stack: ${e.stack}`);
