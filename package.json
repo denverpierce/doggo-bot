@@ -30,7 +30,7 @@
     "dev-run": "yarn tsc-watch --onSuccess './scripts/dev-build-run.sh'",
     "prepare": "yarn run compile",
     "pretest": "yarn run compile",
-    "build-deploy": "./scripts/build.sh",
+    "build-deploy": "./scripts/build-deploy-gcf.sh",
     "start": "cd build;functions-framework --target ${FUNCTION_TARGET};cd .."
   }
 }
