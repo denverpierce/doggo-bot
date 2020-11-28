@@ -1,4 +1,4 @@
-import { logger } from '.';
+import logger from './logging';
 import { calculateStats } from './calcs';
 import { findAndParseStatLine } from './parsers';
 import { SlackWebHookEvent } from './slack';

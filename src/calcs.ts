@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { logger } from '.';
+import logger from './logging';
 import { ParsedLine } from './parsers';
 
 export const calculateStats = (

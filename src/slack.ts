@@ -14,13 +14,13 @@
 
 import { verifyRequestSignature } from '@slack/events-api';
 import { VerifyRequestSignatureParams } from '@slack/events-api/dist/http-handler';
-import { WebAPICallResult } from '@slack/web-api';
-import { Request } from 'express';
-import { logger } from '.';
+import { ChatPostMessageArguments, WebAPICallResult } from '@slack/web-api';
+import { Request, Response } from 'express';
+import logger from './logging';
 import { slackClient } from './services';
 
 export type EventAppMention = {
-  blocks: any[], // RTF version of the message
+  blocks: any[], // RTF version of the message TODO: better type here
   text: string,
   type: 'app_mention',
   channel: string,
@@ -42,7 +42,7 @@ interface GoogleCloudHttpRequest extends Request {
  * @param {string} req.headers Headers Slack SDK uses to authenticate request.
  * @param {string} req.rawBody Raw body of webhook request to check signature against.
  */
-export const verifyWebhook = (req: GoogleCloudHttpRequest) => {
+export const verifyWebhook = (req: GoogleCloudHttpRequest): void => {
   const slackSig = req.headers['x-slack-signature'];
   const slackTimestamp = req.headers['x-slack-request-timestamp'];
 
@@ -74,10 +74,38 @@ export const verifyWebhook = (req: GoogleCloudHttpRequest) => {
   }
 };
 
+export const getSlackChallenge = (req: Request, res: Response) => res.status(200)
+  .type('application/json')
+  .send(JSON.stringify({
+    challenge: req.body.challenge,
+  }));
+
+const statsIntro = {
+  type: 'section',
+  text: {
+    type: 'mrkdwn',
+    text: 'Great walk! :dog: Here are your stats: ',
+  },
+};
+const renderStatsResponse = (message: string): ChatPostMessageArguments['blocks'] => [
+  statsIntro,
+  {
+    type: 'section',
+    text: {
+      type: 'mrkdwn',
+      text: `${message}`,
+    },
+  },
+];
+
+// TODO: this needs to be converted to some kind of intermediate shape,
+// then passed to a message renderer
 export const sendStatsReply = (
   message: string,
   channel: string,
 ): Promise<WebAPICallResult> => slackClient.chat.postMessage({
   channel,
   text: message,
+  blocks: renderStatsResponse(message),
+  icon_emoji: ':dog2:',
 });
