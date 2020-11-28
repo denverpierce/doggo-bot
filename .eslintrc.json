@@ -42,6 +42,20 @@
         "import/extensions": [
             "warn",
             "never"
+        ],
+        "arrow-parens": [
+            "warn",
+            "as-needed"
+        ],
+        "object-shorthand": [
+            "warn",
+            "consistent-as-needed"
+        ],
+        "max-len": [
+            "warn",
+            {
+                "code": 120
+            }
         ]
     }
 }

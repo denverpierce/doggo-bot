@@ -3,17 +3,17 @@ import logger from './logging';
 import { ParsedLine } from './parsers';
 
 export const calculateStats = (
-  parsedDoggos: ParsedLine<string>,
+  parsedAnimal: ParsedLine<string>,
   parsedMiles: ParsedLine<string>,
 ): string => {
   // TODO tuple or w/e
-  logger.info(`Doggo parse: ${JSON.stringify(parsedDoggos)}`);
+  logger.info(`Doggo parse: ${JSON.stringify(parsedAnimal)}`);
   logger.info(`Miles parse: ${JSON.stringify(parsedMiles)}`);
   if (
-    typeof parsedDoggos.parsedValue === 'number'
+    typeof parsedAnimal.parsedValue === 'number'
     && typeof parsedMiles.parsedValue === 'number'
   ) {
-    const doggos = parsedDoggos.parsedValue;
+    const doggos = parsedAnimal.parsedValue;
     const miles = parsedMiles.parsedValue;
     const doggoMiles = doggos / miles;
     if (Number.isFinite(doggoMiles)) {

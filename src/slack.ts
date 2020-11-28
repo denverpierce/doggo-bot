@@ -87,25 +87,25 @@ const statsIntro = {
     text: 'Great walk! :dog: Here are your stats: ',
   },
 };
-const renderStatsResponse = (message: string): ChatPostMessageArguments['blocks'] => [
+const renderStatsResponse = (messages: string[]): ChatPostMessageArguments['blocks'] => [
   statsIntro,
-  {
+  ...messages.map(msg => ({
     type: 'section',
     text: {
       type: 'mrkdwn',
-      text: `${message}`,
+      text: `${msg}`,
     },
-  },
+  })),
 ];
 
 // TODO: this needs to be converted to some kind of intermediate shape,
 // then passed to a message renderer
 export const sendStatsReply = (
-  message: string,
+  messages: string[],
   channel: string,
 ): Promise<WebAPICallResult> => slackClient.chat.postMessage({
-  channel,
-  text: message,
-  blocks: renderStatsResponse(message),
+  channel: channel,
+  text: messages.join('\\n'), // fallback
+  blocks: renderStatsResponse(messages),
   icon_emoji: ':dog2:',
 });
