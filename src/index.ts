@@ -9,12 +9,17 @@ export async function getDoggoStats(req: Request, res: Response): Promise<void> 
     // for initial verification of the webhook from slack
     getSlackChallenge(req, res);
   }
+  if (req.query.code) {
+    // for initial verification of the webhook from slack
+    logger.info(JSON.stringify(req));
+    res.status(200).send('Yer good fam').end();
+  }
 
   verifyWebhook(req); // side effects on failure only
 
   logger.info('Req verified, attempting to get Doggo stats');
   const message = getStatsMessage(req.body);
-  await sendStatsReply(message, req.body.event.channel).catch((e) => {
+  await sendStatsReply(message, req.body.event.channel).catch(e => {
     logger.error(`An error occured sending the message out: ${e.stack}`);
   });
 

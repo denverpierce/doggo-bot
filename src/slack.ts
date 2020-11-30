@@ -57,7 +57,8 @@ export const verifyWebhook = (req: GoogleCloudHttpRequest): void => {
     || !slackTimestamp
     || typeof slackTimestamp !== 'string'
   ) {
-    logger.error(`The slack webhook didn't have the right headers.  The headers given were: ${JSON.stringify(req.headers)}`);
+    logger.error(`The slack webhook didn't have the right headers. 
+     The headers given were: ${JSON.stringify(req.headers)}`);
     throw new Error("The slack webhook didn't have the right headers");
   }
   const signature: VerifyRequestSignatureParams = {

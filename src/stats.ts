@@ -17,7 +17,7 @@ const MILES = 'miles'; // not the cat
 export type Stats = typeof ANIMAL_DOGGOS | typeof MILES; // add other animals
 export const getStatsMessage = (msg: SlackWebHookEvent): string[] => {
   logger.info(`Beginning parse pass, submitted event: ${JSON.stringify(msg.event)}`);
-  const text = msg.event.text.replace('<@U01FG7N9NDT>', ''); // clean out the mention itself
+  const text = msg.event.text.replace(/<@.+>/i, ''); // clean out the mention itself
   try {
     const parsedMiles = findAndParseStatLine(text, MILES);
 
