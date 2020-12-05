@@ -13,7 +13,7 @@ const ANIMAL_CATS = 'cat';
 const ANIMAL_SQUIRREL = 'squirrel';
 export const ANIMALS_ALL = [ANIMAL_DOGGOS, ANIMAL_CATS, ANIMAL_SQUIRREL] as const;
 
-const MILES = 'miles'; // not the cat
+const MILES = 'mile';
 export type Stats = typeof ANIMAL_DOGGOS | typeof MILES; // add other animals
 export const getStatsMessage = (msg: SlackWebHookEvent): string[] => {
   logger.info(`Beginning parse pass, submitted event: ${JSON.stringify(msg.event)}`);

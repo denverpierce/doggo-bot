@@ -1,5 +1,5 @@
 import client from 'axios';
 
-export const getPollenStatus = (): Promise<void> => {
+// export const getPollenStatus = (): Promise<void> => {
 
-};
+// };
