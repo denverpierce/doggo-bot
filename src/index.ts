@@ -37,6 +37,8 @@ export async function getPollenStats(req: Request, res: Response): Promise<void>
     lat: 32.8,
     lng: -96.8,
   };
+  // TODO: make channel configureable
+  const CHANNEL = 'C010LE7MRLM';
   if (req.body.challenge) {
     // for initial verification of the webhook from slack
     getSlackChallenge(req, res);
@@ -45,7 +47,7 @@ export async function getPollenStats(req: Request, res: Response): Promise<void>
   logger.info('Req received, attempting to get Pollen stats');
   const maybePollen = await getPollenStatus(DALLAS);
   if (maybePollen) {
-    sendBlocksMessage(maybePollen, 'C010LE7MRLM');
+    sendBlocksMessage(maybePollen, CHANNEL);
   } else {
     logger.info('Request received, but no pollen risk was found, so no message was sent.');
   }

@@ -12,7 +12,7 @@ const pollenRiskToBlock = (
   type: 'section',
   text: {
     type: 'mrkdwn',
-    text: `Risk of ${pollenKey} is ${pollenRisk[pollenKey]}`,
+    text: `Risk of *${pollenKey.replace('_', '')}* is *${pollenRisk[pollenKey]}*`,
   },
 });
 
@@ -20,7 +20,7 @@ const pollenIntro: SectionBlock = {
   type: 'section',
   text: {
     type: 'mrkdwn',
-    text: 'I smell something bad in the air :dog2:.  Be careful of these baddies: ',
+    text: 'I smell something bad in the air :dog2:  Be careful of these baddies: ',
   },
 };
 
