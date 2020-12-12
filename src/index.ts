@@ -1,8 +1,11 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Request, Response } from 'express';
-import { getSlackChallenge, sendStatsReply, verifyWebhook } from './slack';
+import {
+  getSlackChallenge, renderStatsResponse, sendBlocksMessage, verifyWebhook,
+} from './slack';
 import { getStatsMessage } from './stats';
 import logger from './logging';
-import { ambClient } from './services';
+import { getPollenStatus } from './pollen';
 
 export async function getDoggoStats(req: Request, res: Response): Promise<void> {
   if (req.body.challenge) {
@@ -18,8 +21,8 @@ export async function getDoggoStats(req: Request, res: Response): Promise<void> 
   verifyWebhook(req); // side effects on failure only
 
   logger.info('Req verified, attempting to get Doggo stats');
-  const message = getStatsMessage(req.body);
-  await sendStatsReply(message, req.body.event.channel).catch(e => {
+  const messages = getStatsMessage(req.body);
+  await sendBlocksMessage(renderStatsResponse(messages), req.body.event.channel).catch(e => {
     logger.error(`An error occured sending the message out: ${e.stack}`);
   });
 
@@ -29,6 +32,7 @@ export async function getDoggoStats(req: Request, res: Response): Promise<void> 
 }
 
 export async function getPollenStats(req: Request, res: Response): Promise<void> {
+  // TODO: make location configureable
   const DALLAS = {
     lat: 32.8,
     lng: -96.8,
@@ -38,10 +42,13 @@ export async function getPollenStats(req: Request, res: Response): Promise<void>
     getSlackChallenge(req, res);
   }
 
-  verifyWebhook(req); // side effects on failure only
-
-  logger.info('Req verified, attempting to get Pollen stats');
-  const maybePollen = await ambClient.getLatestPollen(DALLAS);
+  logger.info('Req received, attempting to get Pollen stats');
+  const maybePollen = await getPollenStatus(DALLAS);
+  if (maybePollen) {
+    sendBlocksMessage(maybePollen, 'C010LE7MRLM');
+  } else {
+    logger.info('Request received, but no pollen risk was found, so no message was sent.');
+  }
 
   res
     .status(200)

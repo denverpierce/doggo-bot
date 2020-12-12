@@ -6,7 +6,6 @@
   "author": "Denver Pierce <Denver.Pierec@gmail.com>",
   "license": "Apache-2.0",
   "dependencies": {
-    "@google-cloud/functions-framework": "^1.7.1",
     "@google-cloud/logging-winston": "^1.1.1",
     "@slack/events-api": "^2.3.4",
     "@slack/web-api": "^5.13.0",
@@ -29,8 +28,6 @@
     "compile": "yarn tsc",
     "dev": "yarn tsc-watch --onSuccess 'yarn run start'",
     "dev-run": "yarn tsc-watch --onSuccess './scripts/dev-build-run.sh'",
-    "prepare": "yarn run compile",
-    "pretest": "yarn run compile",
     "build-deploy": "./scripts/build-deploy-gcf.sh",
     "start": "cd build;functions-framework --target ${FUNCTION_TARGET};cd .."
   }

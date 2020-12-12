@@ -63,16 +63,6 @@
     retry-request "^4.0.0"
     teeny-request "^6.0.0"
 
-"@google-cloud/functions-framework@^1.7.1":
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/@google-cloud/functions-framework/-/functions-framework-1.7.1.tgz#d29a27744a6eb2f95d840b86135b97b0d804a49e"
-  integrity sha512-jjG7nH94Thij97EPW2oQN28pVPRN3UEGcsCRi6RdaaiSyK32X40LN4WHntKVmQPBhqH+I0magHMk1pSb0McH2g==
-  dependencies:
-    body-parser "^1.18.3"
-    express "^4.16.4"
-    minimist "^1.2.0"
-    on-finished "^2.3.0"
-
 "@google-cloud/logging-winston@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@google-cloud/logging-winston/-/logging-winston-1.1.1.tgz#63ee1f7ce412455e49fd148ea8d43643066d7056"
@@ -669,7 +659,7 @@ bignumber.js@^9.0.0:
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.0.1.tgz#8d7ba124c882bfd8e43260c67475518d0689e4e5"
   integrity sha512-IdZR9mh6ahOBv/hYGiXyVuyCetmGJhtYkqLBpTStdhEGjegpPlUawydyaF3pbIOFynJTpllEs+NP+CS9jKFLjA==
 
-body-parser@1.19.0, body-parser@^1.18.3:
+body-parser@1.19.0:
   version "1.19.0"
   resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.19.0.tgz#96b2709e57c9c4e09a6fd66a8fd979844f69f08a"
   integrity sha512-dhEPs72UPbDnAQJ9ZKMNTP6ptJaionhP5cBb541nXPlW60Jepo9RV/a4fX4XWW9CuFNK22krhrj1+rgzifNCsw==

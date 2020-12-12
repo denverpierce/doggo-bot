@@ -15,6 +15,7 @@ export const findAndParseStatLine = (msg: string, stat: string): ParsedLine<stri
       parsedValue: `I found ${stat}, but couldn't figure out how many :(`,
     };
   }
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore types are wrong here
   const statNumber = parseFloat(statString);
   if (!Number.isFinite(statNumber)) {

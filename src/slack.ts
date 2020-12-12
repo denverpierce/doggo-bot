@@ -14,13 +14,14 @@
 
 import { verifyRequestSignature } from '@slack/events-api';
 import { VerifyRequestSignatureParams } from '@slack/events-api/dist/http-handler';
-import { ChatPostMessageArguments, WebAPICallResult } from '@slack/web-api';
+import { SectionBlock, View, WebAPICallResult } from '@slack/web-api';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Request, Response } from 'express';
 import logger from './logging';
 import { slackClient } from './services';
 
 export type EventAppMention = {
-  blocks: any[], // RTF version of the message TODO: better type here
+  blocks: View['blocks'], // RTF version of the message TODO: better type here
   text: string,
   type: 'app_mention',
   channel: string,
@@ -65,6 +66,7 @@ export const verifyWebhook = (req: GoogleCloudHttpRequest): void => {
     signingSecret: process.env.SLACK_SIGNING_SECRET,
     requestSignature: slackSig,
     requestTimestamp: parseFloat(slackTimestamp),
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore #notmytypes
     body: req.rawBody,
   };
@@ -75,25 +77,26 @@ export const verifyWebhook = (req: GoogleCloudHttpRequest): void => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const getSlackChallenge = (req: Request, res: Response) => res.status(200)
   .type('application/json')
   .send(JSON.stringify({
     challenge: req.body.challenge,
   }));
 
-const statsIntro = {
+const statsIntro: SectionBlock = {
   type: 'section',
   text: {
     type: 'mrkdwn',
     text: 'Great walk! :dog: Here are your stats: ',
   },
 };
-const renderStatsResponse = (messages: string[]): ChatPostMessageArguments['blocks'] => [
+export const renderStatsResponse = (messages: string[]): SectionBlock[] => [
   statsIntro,
   ...messages.map(msg => ({
-    type: 'section',
+    type: 'section' as const,
     text: {
-      type: 'mrkdwn',
+      type: 'mrkdwn' as const,
       text: `${msg}`,
     },
   })),
@@ -101,12 +104,12 @@ const renderStatsResponse = (messages: string[]): ChatPostMessageArguments['bloc
 
 // TODO: this needs to be converted to some kind of intermediate shape,
 // then passed to a message renderer
-export const sendStatsReply = (
-  messages: string[],
+export const sendBlocksMessage = (
+  blocks: SectionBlock[],
   channel: string,
 ): Promise<WebAPICallResult> => slackClient.chat.postMessage({
+  blocks: blocks,
   channel: channel,
-  text: messages.join('\\n'), // fallback
-  blocks: renderStatsResponse(messages),
+  text: blocks.map(b => b.text?.text || 'Error: No text found').join(), // this is just a fallback
   icon_emoji: ':dog2:',
 });

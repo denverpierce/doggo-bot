@@ -12,7 +12,7 @@ if [ -z "${AMB_TOKEN}" ]; then echo "AMB_TOKEN is unset" exit 1; else echo "AMB_
 cp package.json build
 yarn run compile
 gcloud functions deploy "$FUNCTION_TARGET" \
---runtime nodejs10 \
+--runtime nodejs12 \
 --trigger-http \
 --set-env-vars "SLACK_SIGNING_SECRET=$SLACK_SIGNING_SECRET,SLACK_TOKEN=$SLACK_TOKEN,AMB_TOKEN=$AMB_TOKEN" \
 --allow-unauthenticated \

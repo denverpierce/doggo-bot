@@ -2,13 +2,16 @@
   "compilerOptions": {
     "target": "es2017",
     "module": "CommonJS",
-    "moduleResolution":"Node",
+    "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "outDir": "build",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "lib": [
+      "ES2019"
+    ]
   },
   "include": [
     "src"
