@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eux 
+set -eu
 set -o pipefail
 
 # these won't actually do anything, as the sets at the top cause the acceses to fail
