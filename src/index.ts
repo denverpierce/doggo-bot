@@ -38,7 +38,8 @@ export async function getPollenStats(req: Request, res: Response): Promise<void>
     lng: -96.8,
   };
   // TODO: make channel configureable
-  const CHANNEL = 'C010LE7MRLM';
+  const CHANNEL = process.env.POLLEN_CHANNEL;
+  if (!CHANNEL) throw new Error('Pollen channel not found, exiting');
   if (req.body.challenge) {
     // for initial verification of the webhook from slack
     getSlackChallenge(req, res);
