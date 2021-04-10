@@ -5,6 +5,7 @@ import {
 } from './slack';
 import { getStatsMessage } from './stats';
 import logger from './logging';
+
 import { getPollenStatus } from './pollen';
 
 export async function getDoggoStats(req: Request, res: Response): Promise<void> {
@@ -15,8 +16,10 @@ export async function getDoggoStats(req: Request, res: Response): Promise<void> 
   if (req.query.code) {
     // for initial verification of the webhook from slack
     logger.info(JSON.stringify(req));
-    res.status(200).send('Yer good fam').end();
   }
+  // we respond immediately, otherwise slack will retry the request right away,
+  // causing extra messages to appear for each retry
+  res.status(200).send().end();
 
   verifyWebhook(req); // side effects on failure only
 
@@ -25,10 +28,6 @@ export async function getDoggoStats(req: Request, res: Response): Promise<void> 
   await sendBlocksMessage(renderStatsResponse(messages), req.body.event.channel).catch(e => {
     logger.error(`An error occured sending the message out: ${e.stack}`);
   });
-
-  res
-    .status(200)
-    .end();
 }
 
 export async function getPollenStats(req: Request, res: Response): Promise<void> {

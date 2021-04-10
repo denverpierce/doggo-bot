@@ -3,9 +3,6 @@ import { calculateStats } from './calcs';
 import { findAndParseStatLine } from './parsers';
 import { SlackWebHookEvent } from './slack';
 
-// TODO: plural string support
-// const ANIMAL_DOGGOS = /(doggos?)/i;
-// const ANIMAL_CATS = /(cats?)/i;
 
 // using singlar here captures '1 doggo' but outputs the wrong pluraity on render
 const ANIMAL_DOGGOS = 'doggo';
