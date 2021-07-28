@@ -6,7 +6,8 @@ import {
 import { getStatsMessage } from './stats';
 import logger from './logging';
 
-import { getPollenStatus } from './pollen';
+import { tomClient } from './services';
+import { tomPollenToSlack } from './sources/tom/tom.renderer';
 
 export async function getDoggoStats(req: Request, res: Response): Promise<void> {
   if (req.body.challenge) {
@@ -36,7 +37,6 @@ export async function getPollenStats(req: Request, res: Response): Promise<void>
     lat: 32.8,
     lng: -96.8,
   };
-  // TODO: make channel configureable
   const CHANNEL = process.env.POLLEN_CHANNEL;
   if (!CHANNEL) throw new Error('Pollen channel not found, exiting');
   if (req.body.challenge) {
@@ -45,9 +45,10 @@ export async function getPollenStats(req: Request, res: Response): Promise<void>
   }
 
   logger.info('Req received, attempting to get Pollen stats');
-  const maybePollen = await getPollenStatus(DALLAS);
-  if (maybePollen) {
-    sendBlocksMessage(maybePollen, CHANNEL);
+  const pollenData = await tomClient.getLatestPollen(DALLAS);
+  const pollenMessage = tomPollenToSlack(pollenData);
+  if (pollenMessage) {
+    sendBlocksMessage(pollenMessage, CHANNEL);
   } else {
     logger.info('Request received, but no pollen risk was found, so no message was sent.');
   }
