@@ -11,12 +11,12 @@ import { tomPollenToSlack } from './sources/tom/tom.renderer';
 
 export async function getDoggoStats(req: Request, res: Response): Promise<void> {
   if (req.body.challenge) {
-    // for initial verification of the webhook from slack
+    // for initial verification of the application from slack
     getSlackChallenge(req, res);
   }
   if (req.query.code) {
-    // for initial verification of the webhook from slack
-    logger.info(JSON.stringify(req));
+    // for installation of the app in a new workspace for slack
+    logger.info(req.query.code);
   }
   // we respond immediately, otherwise slack will retry the request right away,
   // causing extra messages to appear for each retry

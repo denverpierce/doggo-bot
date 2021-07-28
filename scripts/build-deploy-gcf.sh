@@ -16,6 +16,6 @@ yarn run compile
 gcloud functions deploy "$FUNCTION_TARGET" \
 --runtime nodejs12 \
 --trigger-http \
---set-env-vars "SLACK_SIGNING_SECRET=$SLACK_SIGNING_SECRET,SLACK_TOKEN=$SLACK_TOKEN,AMB_TOKEN=$AMB_TOKEN,POLLEN_CHANNEL=$POLLEN_CHANNEL" \
+--set-env-vars "SLACK_SIGNING_SECRET=$SLACK_SIGNING_SECRET,SLACK_TOKEN=$SLACK_TOKEN,TOM_TOKEN=$TOM_TOKEN,POLLEN_CHANNEL=$POLLEN_CHANNEL" \
 --allow-unauthenticated \
 --source "./build"
