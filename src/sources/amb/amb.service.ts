@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import client from 'axios';
-import logger from './logging';
+import logger from '../../logging';
 
 export const POLLEN_LOW = 'Low';
 const POLLEN_MED = 'Med';
@@ -51,3 +51,4 @@ export const AmbClient = (token: string) => {
     },
   };
 };
+export type AmbClient = typeof AmbClient;

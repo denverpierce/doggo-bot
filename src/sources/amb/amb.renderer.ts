@@ -1,8 +1,10 @@
 import { SectionBlock } from '@slack/web-api';
-import { AmbLocation, AmbPollenGeospatial, POLLEN_LOW } from './amb';
-import { ambClient } from './services';
-import { getTypedKeys } from './utils';
-import logger from './logging';
+import {
+  AmbLocation, AmbPollenGeospatial, POLLEN_LOW, AmbClient,
+} from './amb.service';
+
+import { getTypedKeys } from '../../utils';
+import logger from '../../logging';
 
 // TODO: output the pollen counts when risk is high
 const pollenRiskToBlock = (
@@ -16,7 +18,7 @@ const pollenRiskToBlock = (
   },
 });
 
-const pollenIntro: SectionBlock = {
+export const pollenIntro: SectionBlock = {
   type: 'section',
   text: {
     type: 'mrkdwn',
@@ -25,10 +27,11 @@ const pollenIntro: SectionBlock = {
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export const getPollenStatus = async (
+export const ambPollenToSlack = async (
   location: AmbLocation,
 ): Promise<SectionBlock[] | undefined> => {
-  const { data: pollenData } = await ambClient.getLatestPollen(location);
+  const client = AmbClient('FAKE TOKEN DOESNT WORK');
+  const { data: pollenData } = await client.getLatestPollen(location);
   logger.info(`Pollen data received, attempting to build blocks for: ${JSON.stringify(pollenData)}`);
   const pollenBlocks = pollenData.data
     .map(rawPollen => rawPollen.Risk) // just want the risk data for now
