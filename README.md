@@ -1,4 +1,4 @@
-# Doggo bot, for tracking doggo stats
+# Chat Bot with Pollen notifier
 
 Based on <https://github.com/ptone/node-cloud-function-boiler>
 
@@ -21,7 +21,9 @@ yarn run dev
 
 ## Pollen Stats
 
-Pollen stats, when invoked from the gcp function, will call the Ambee Pollen API, format the response, and send it to the hardcoded channel if the pollen levels are above "low".  The location to retrieve the pollen information for is also hardcoded, largely because I ran out of interest after getting that far in the project.  Both of those could be moved out and into a config somewhere, as well as some way of attaching a location to a user and having the bot DM them instead of putting it in a single channel, that way locations and users could be bound together, giving each user a customized pollen report for their location.
+Pollen stats, when invoked from the gcp function, will call the Tomorrow.io Pollen API, format the response, and send it to the hardcoded channel if the pollen levels are above "Very Low".  The location to retrieve the pollen information for is also hardcoded, largely because I decided that further configuration development was not worth the time investment.
+
+Both of those could be moved out and into a config somewhere, as well as some way of attaching a location to a user and having the bot DM them instead of putting it in a single channel, that way locations and users could be bound together, giving each user a customized pollen report for their location.
 
 I am interested in other, more granular pollen data sources, but there aren't many that are computer friendly.
 
