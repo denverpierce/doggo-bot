@@ -35,7 +35,7 @@ export const tomPollenToSlack = (
     .flatMap(i => i.values)
     .flatMap(pollenIndicies => {
       const riskyPollenKeys = getTypedKeys(pollenIndicies)
-        .filter(risk => pollenIndicies[risk] >= 2); // only build/send messages if pollen index is equal or above "Low"
+        .filter(risk => pollenIndicies[risk] >= 1); // only build/send messages if pollen index is equal or above "Low"
         return riskyPollenKeys.map(riskyPollenKey => pollenRiskToBlock(riskyPollenKey, pollenIndicies));
     })
   if (pollenBlocks.length === 0) return undefined;
