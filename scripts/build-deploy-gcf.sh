@@ -8,7 +8,8 @@ if [ -z "${FUNCTION_TARGET}" ]; then echo "FUNCTION_TARGET is unset" exit 1; els
 if [ -z "${SLACK_SIGNING_SECRET}" ]; then echo "SLACK_SIGNING_SECRET is unset" exit 1; else echo "SLACK_SIGNING_SECRET is set"; fi
 if [ -z "${SLACK_TOKEN}" ]; then echo "SLACK_TOKEN is unset" exit 1; else echo "SLACK_TOKEN is set"; fi
 # if [ -z "${AMB_TOKEN}" ]; then echo "AMB_TOKEN is unset" exit 1; else echo "AMB_TOKEN is set"; fi
-if [ -z "${TOM_TOKEN}" ]; then echo "TOM_TOKEN is unset" exit 1; else echo "TOM_TOKEN is set"; fi
+# if [ -z "${TOM_TOKEN}" ]; then echo "TOM_TOKEN is unset" exit 1; else echo "TOM_TOKEN is set"; fi
+if [ -z "${PSENSE_TOKEN}" ]; then echo "PSENSE_TOKEN is unset" exit 1; else echo "PSENSE_TOKEN is set"; fi
 if [ -z "${POLLEN_CHANNEL}" ]; then echo "POLLEN_CHANNEL is unset" exit 1; else echo "POLLEN_CHANNEL is set"; fi
 
 cp package.json build
@@ -16,6 +17,6 @@ yarn run compile
 gcloud functions deploy "$FUNCTION_TARGET" \
 --runtime nodejs12 \
 --trigger-http \
---set-env-vars "SLACK_SIGNING_SECRET=$SLACK_SIGNING_SECRET,SLACK_TOKEN=$SLACK_TOKEN,TOM_TOKEN=$TOM_TOKEN,POLLEN_CHANNEL=$POLLEN_CHANNEL" \
+--set-env-vars "SLACK_SIGNING_SECRET=$SLACK_SIGNING_SECRET,SLACK_TOKEN=$SLACK_TOKEN,PSENSE_TOKEN=$PSENSE_TOKEN,POLLEN_CHANNEL=$POLLEN_CHANNEL" \
 --allow-unauthenticated \
 --source "./build"
