@@ -6,8 +6,8 @@ import {
 import { getStatsMessage } from './stats';
 import logger from './logging';
 
-import { tomClient } from './services';
-import { tomPollenToSlack } from './sources/tom/tom.renderer';
+import { pSenseService } from './services';
+import { pSensePollenToSlack } from './sources/psense/psense.renderer';
 
 export async function getDoggoStats(req: Request, res: Response): Promise<void> {
   if (req.body.challenge) {
@@ -45,8 +45,8 @@ export async function getPollenStats(req: Request, res: Response): Promise<void>
   }
 
   logger.info('Req received, attempting to get Pollen stats');
-  const pollenData = await tomClient.getLatestPollen(DALLAS);
-  const pollenMessage = tomPollenToSlack(pollenData);
+  const pollenData = await pSenseService.getLatestPollen(DALLAS);
+  const pollenMessage = pSensePollenToSlack(pollenData);
   if (pollenMessage) {
     sendBlocksMessage(pollenMessage, CHANNEL);
   } else {
